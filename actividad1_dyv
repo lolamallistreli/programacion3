@@ -48,3 +48,7 @@ print("Caso 2:", subarrayMaximo(A2, 0, len(A2) - 1))  # Esperado: 6
 # Caso 3: todos negativos
 A3 = [-5, -3, -1, -4, -2]
 print("Caso 3:", subarrayMaximo(A3, 0, len(A3) - 1))  # Esperado: -1
+
+#Caso 4: un solo elemento 
+A4 = [7]
+print("Caso 4:", subarrayMaximo(A4, 0, len(A4) - 1))  # Esperado: 7

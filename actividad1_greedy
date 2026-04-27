@@ -1,73 +1,88 @@
-#ordenar por mergesort (complejidad n log n) 
 def merge(S, inicio, fin):
-    R = [0] * (fin - inicio + 1)
+    R = [None] * (fin - inicio + 1)
     medio = (inicio + fin) // 2
     i = inicio
     j = medio + 1
 
-    for k in range(0, fin - inicio + 1):
-        if (i > medio) or (S[i][0] <= S[j][0] and i <= medio):
+    for k in range(fin - inicio + 1):
+        if (j > fin) or (i <= medio and S[i][0] <= S[j][0]):
             R[k] = S[i]
-            i = i + 1
+            i += 1
         else:
             R[k] = S[j]
-            j = j + 1
+            j += 1
 
-    for k in range(0, fin - inicio + 1):
+    for k in range(fin - inicio + 1):
         S[inicio + k] = R[k]
 
 
-def mergeSort(S, inicio, fin):
+def mergesort(S, inicio, fin):
     if inicio < fin:
-        medio = (inicio + fin) // 2
-        mergeSort(S, inicio, medio)
-        mergeSort(S, medio + 1, fin)
+        medio = (fin + inicio) // 2
+        mergesort(S, inicio, medio)
+        mergesort(S, medio + 1, fin)
         merge(S, inicio, fin)
 
-#funcon que seelecciona el sensor que cubre la mayor parte de la ruta, se recorre una sola vez (complejidad n)
-#considerando que la mejor condicion es elegir los sensores que cubren la mayor parte de la ruta, se ordenan por inicio y se recorre una sola vez para seleccionar los sensores necesarios para cubrir la ruta completa.
+
 def greedy_sensores(sensores, L):
-    # Ordenar por inicio usando MergeSort → O(n log n)
-    mergeSort(sensores, 0, len(sensores) - 1)
+    n = len(sensores)
+    if n == 0:
+        return None
 
-    posicion = 0
-    cantidad = 0
+    C = list(sensores)
+    mergesort(C, 0, n - 1)
 
-    # Recorre una sola vez → O(n)
-    for i in range(len(sensores)):
-        inicio = sensores[i][0]
-        fin = sensores[i][1]
+    S = []
+    cobertura_actual = 0
+    idx = 0
 
-        if inicio <= posicion and fin > posicion:
-            print("Sensor seleccionado:", sensores[i])
-            cantidad = cantidad + 1
-            posicion = fin
+    while cobertura_actual < L and idx < n:
+        mejor = None
+        while idx < n and C[idx][0] <= cobertura_actual:
+            if mejor is None or C[idx][1] > mejor[1]:
+                mejor = C[idx]
+            idx += 1
 
-        if posicion >= L:
-            break
+        if mejor is None:
+            print("No hay solución.")
+            return
 
-    if posicion < L:
-        print("No se puede cubrir la ruta")
+        S.append(mejor)
+        cobertura_actual = mejor[1]
+
+    if cobertura_actual >= L:
+        print(f"Sensores seleccionados ({len(S)}): {S}")
     else:
-        print("Cantidad de sensores:", cantidad)
+        print("No hay solución.")
 
 
-# casos de prueba 
+# casos de prueba
 # Caso del enunciado
 sensores1 = [(0,2), (1,5), (3,6), (5,8)]
 print("Caso enunciado:")
 greedy_sensores(sensores1, 8)
-
 print()
 
-# Caso 1: solución óptima
-sensores2 = [(0,4), (0,2), (3,8), (3,6)]
-print("Caso 1:")
-greedy_sensores(sensores2, 8)
-
+# Caso 1: muchos sensores pero greedy elige los mínimos
+# hay 6 sensores pero la solución óptima usa solo 2
+sensores2 = [(0,1), (0,2), (0,8), (1,3), (4,6), (7,10)]
+print("Caso 1 - greedy elige 2 de 6 sensores:")
+greedy_sensores(sensores2, 10)
 print()
 
-# Caso 2: solución óptima
-sensores3 = [(0,3), (2,6), (5,9), (8,10)]
-print("Caso 2:")
+# Caso 2: sensores desordenados con mucho solapamiento
+# greedy tiene que ordenarlos primero y elegir bien
+sensores3 = [(5,8), (0,1), (3,9), (0,6), (8,10)]
+print("Caso 2 - sensores desordenados:")
 greedy_sensores(sensores3, 10)
+print()
+
+# Caso 3: no se puede cubrir la ruta (hay un hueco)
+sensores4 = [(0,3), (5,8), (7,10)]
+print("Caso 3 - no se puede cubrir:")
+greedy_sensores(sensores4, 10)
+
+#Caso 4: un solo sensor que cubre toda la ruta
+sensores5 = [(0,10)]
+print("Caso 4 - un solo sensor cubre toda la ruta:")
+greedy_sensores(sensores5, 10)
