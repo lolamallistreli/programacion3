@@ -1,0 +1,73 @@
+#ordenar por mergesort (complejidad n log n) 
+def merge(S, inicio, fin):
+    R = [0] * (fin - inicio + 1)
+    medio = (inicio + fin) // 2
+    i = inicio
+    j = medio + 1
+
+    for k in range(0, fin - inicio + 1):
+        if (i > medio) or (S[i][0] <= S[j][0] and i <= medio):
+            R[k] = S[i]
+            i = i + 1
+        else:
+            R[k] = S[j]
+            j = j + 1
+
+    for k in range(0, fin - inicio + 1):
+        S[inicio + k] = R[k]
+
+
+def mergeSort(S, inicio, fin):
+    if inicio < fin:
+        medio = (inicio + fin) // 2
+        mergeSort(S, inicio, medio)
+        mergeSort(S, medio + 1, fin)
+        merge(S, inicio, fin)
+
+#funcon que seelecciona el sensor que cubre la mayor parte de la ruta, se recorre una sola vez (complejidad n)
+#considerando que la mejor condicion es elegir los sensores que cubren la mayor parte de la ruta, se ordenan por inicio y se recorre una sola vez para seleccionar los sensores necesarios para cubrir la ruta completa.
+def greedy_sensores(sensores, L):
+    # Ordenar por inicio usando MergeSort → O(n log n)
+    mergeSort(sensores, 0, len(sensores) - 1)
+
+    posicion = 0
+    cantidad = 0
+
+    # Recorre una sola vez → O(n)
+    for i in range(len(sensores)):
+        inicio = sensores[i][0]
+        fin = sensores[i][1]
+
+        if inicio <= posicion and fin > posicion:
+            print("Sensor seleccionado:", sensores[i])
+            cantidad = cantidad + 1
+            posicion = fin
+
+        if posicion >= L:
+            break
+
+    if posicion < L:
+        print("No se puede cubrir la ruta")
+    else:
+        print("Cantidad de sensores:", cantidad)
+
+
+# casos de prueba 
+# Caso del enunciado
+sensores1 = [(0,2), (1,5), (3,6), (5,8)]
+print("Caso enunciado:")
+greedy_sensores(sensores1, 8)
+
+print()
+
+# Caso 1: solución óptima
+sensores2 = [(0,4), (0,2), (3,8), (3,6)]
+print("Caso 1:")
+greedy_sensores(sensores2, 8)
+
+print()
+
+# Caso 2: solución óptima
+sensores3 = [(0,3), (2,6), (5,9), (8,10)]
+print("Caso 2:")
+greedy_sensores(sensores3, 10)
