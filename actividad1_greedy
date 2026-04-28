@@ -68,32 +68,27 @@ def greedy_sensores(sensores, L):
 # casos de prueba
 # Caso del enunciado
 sensores1 = [(0,2), (1,5), (3,6), (5,8)]
-print("Caso enunciado:")
 greedy_sensores(sensores1, 8)
 print()
 
 # Caso 1: muchos sensores pero greedy elige los mínimos
 # hay 6 sensores pero la solución óptima usa solo 2
 sensores2 = [(0,3), (2,4), (2,6), (4,7), (5,8), (8,9), (8,10)]
-print("Caso 1 - muchos sensores:")
 greedy_sensores(sensores2, 10)
 print()
 
 # Caso 2: sensores desordenados con mucho solapamiento
 # greedy tiene que ordenarlos primero y elegir bien
 sensores3 = [(0,8), (2,7), (5,8), (0,2)]
-print("Caso 2 - sensores desordenados:")
 greedy_sensores(sensores3, 8)
 print()
 
 # Caso 3: no se puede cubrir la ruta (hay un hueco)
 sensores4 = [(0,3), (5,8), (7,10)]
-print("Caso 3 - no se puede cubrir:")
 greedy_sensores(sensores4, 10)
 
 #Caso 4: un solo sensor que cubre toda la ruta
 sensores5 = [(0,10)]
-print("Caso 4 - un solo sensor cubre toda la ruta:")
 greedy_sensores(sensores5, 10)
 
 

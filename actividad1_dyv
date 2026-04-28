@@ -55,4 +55,4 @@ print("Caso 4:", subarrayMaximo(A4, 0, len(A4) - 1))  # Esperado: 7
 
 #Caso 5: ejemplo consigna 
 A5 = [1, 2, 3, -2, 5, -1, -10, 3]
-print("Caso 5:", subarrayMaximo(A5, 0, len(A5) - 1))  # Esperado: 9 (1+2+3-2+5)
+print("Caso 5:", subarrayMaximo(A5, 0, len(A5) - 1))  # Esperado: 9 
